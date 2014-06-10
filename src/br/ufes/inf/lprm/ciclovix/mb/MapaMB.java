@@ -19,10 +19,11 @@ public class MapaMB implements Serializable {
 	AnotacaoDAO dao;
 
 	public String getTest() {
-		Anotacao o = new Anotacao();
-		if (dao.salvar(o))
-			return "Sucesso!";
-		else
-			return "Tela azul!";
+//		Anotacao o = new Anotacao();
+//		if (dao.salvar(o))
+//			return "Sucesso!";
+//		else
+//			return "Tela azul!";
+		return "Test!";
 	}
 }
