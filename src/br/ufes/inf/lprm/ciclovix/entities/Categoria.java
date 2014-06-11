@@ -4,8 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class SemanticaAnotacao extends Entidade {
+public class Categoria extends Entidade {
 	String nome;
+	int tipo; // PONTO, LINHA, AREA
 	@ManyToOne
 	Mapa mapa;
 
@@ -15,5 +16,13 @@ public class SemanticaAnotacao extends Entidade {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public int getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
 	}
 }

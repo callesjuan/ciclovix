@@ -1,8 +1,10 @@
 package br.ufes.inf.lprm.ciclovix.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -16,10 +18,9 @@ public class Anotacao extends Entidade {
 	@ManyToMany(targetEntity = Pessoa.class)
 	@JoinTable(name = "PessoaAnotacao", joinColumns = @JoinColumn(name = "anotacao"), inverseJoinColumns = @JoinColumn(name = "autor"))
 	List<Pessoa> autores;
-	int tipo; // PONTO, LINHA, AREA
 	@ManyToOne
-	SemanticaAnotacao semantica;
-	@OneToMany(mappedBy = "anotacao")
+	Categoria categoria;
+	@OneToMany(mappedBy = "anotacao", fetch = FetchType.LAZY)
 	List<Local> locais;
 	String nome;
 	long timestamp;
@@ -43,20 +44,12 @@ public class Anotacao extends Entidade {
 		this.autores = autores;
 	}
 
-	public int getTipo() {
-		return tipo;
+	public Categoria getCategoria() {
+		return categoria;
 	}
 
-	public void setTipo(int tipo) {
-		this.tipo = tipo;
-	}
-
-	public SemanticaAnotacao getSemantica() {
-		return semantica;
-	}
-
-	public void setSemantica(SemanticaAnotacao semantica) {
-		this.semantica = semantica;
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 	public List<Local> getLocais() {
@@ -105,5 +98,12 @@ public class Anotacao extends Entidade {
 
 	public void setReanotacao(int reanotacao) {
 		this.reanotacao = reanotacao;
+	}
+	
+	public void addAutor(Pessoa autor) {
+		if (autores == null) {
+			autores = new ArrayList<Pessoa>();
+		}
+		this.autores.add(autor);
 	}
 }

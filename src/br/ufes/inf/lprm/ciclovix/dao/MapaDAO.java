@@ -4,10 +4,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import br.ufes.inf.lprm.ciclovix.entities.Anotacao;
+import br.ufes.inf.lprm.ciclovix.entities.Mapa;
 
 @Stateless
-public class AnotacaoDAO extends EntidadeDAO<Anotacao> {
+public class MapaDAO extends EntidadeDAO<Mapa> {
 	@PersistenceContext
 	private EntityManager em;
 
