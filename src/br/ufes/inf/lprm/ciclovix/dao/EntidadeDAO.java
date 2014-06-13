@@ -13,13 +13,13 @@ public abstract class EntidadeDAO<T extends Entidade> {
 
 	public T salvar(T obj) throws Exception {
 		try {
-			getEntityManager().getTransaction().begin();
+			// getEntityManager().getTransaction().begin();
 			if (obj.getId() == null) {
 				getEntityManager().persist(obj);
 			} else {
 				obj = getEntityManager().merge(obj);
 			}
-			getEntityManager().getTransaction().commit();
+			// getEntityManager().getTransaction().commit();
 		} catch (Exception ex) {
 			throw ex;
 		}
@@ -28,9 +28,9 @@ public abstract class EntidadeDAO<T extends Entidade> {
 
 	public void excluir(T obj) throws Exception {
 		try {
-			getEntityManager().getTransaction().begin();
+			// getEntityManager().getTransaction().begin();
 			getEntityManager().remove(obj);
-			getEntityManager().getTransaction().commit();
+			// getEntityManager().getTransaction().commit();
 		} catch (Exception ex) {
 			throw ex;
 		}

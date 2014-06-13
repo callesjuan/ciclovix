@@ -25,15 +25,15 @@ public class MapaMB implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
-	AnotacaoDAO daoAnotacao;
-	@EJB
-	LocalDAO daoLocal;
-	@EJB
 	MapaDAO daoMapa;
 	@EJB
 	CategoriaDAO daoCategoria;
 	@EJB
 	PessoaDAO daoPessoa;	
+	@EJB
+	AnotacaoDAO daoAnotacao;
+	@EJB
+	LocalDAO daoLocal;
 
 	public String getTest() throws Exception {
 		
@@ -54,9 +54,9 @@ public class MapaMB implements Serializable {
 		Categoria categoria = new Categoria();
 		categoria.setNome("bicicletario");
 		categoria.setTipo(1);
-		
+
 		daoCategoria.salvar(categoria);
-		
+
 		/*
 		 * ADICIONANDO NOVO USUARIO
 		 */
@@ -67,7 +67,7 @@ public class MapaMB implements Serializable {
 		usuario.setContaTwitter("@callesjuan");
 
 		daoPessoa.salvar(usuario);
-		
+
 		/*
 		 * ADICIONANDO ANOTACAO
 		 */
@@ -77,14 +77,14 @@ public class MapaMB implements Serializable {
 		anotacao.addAutor(usuario);
 		anotacao.setCategoria(categoria);
 		anotacao.setTimestamp((new Date()).getTime());
-		
+
 		daoAnotacao.salvar(anotacao);
-		
+
 		Local local = new Local();
 		local.setAnotacao(anotacao);
 		local.setLatitude(0);
 		local.setLongitude(0);
-		
+
 		daoLocal.salvar(local);
 		
 		return "Test!";
