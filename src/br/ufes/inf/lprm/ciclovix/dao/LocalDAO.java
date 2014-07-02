@@ -15,4 +15,9 @@ public class LocalDAO extends EntidadeDAO<Local> {
 	public EntityManager getEntityManager() {
 		return em;
 	}
+
+	@Override
+	public Class<Local> getDomainClass() {
+		return Local.class;
+	}
 }

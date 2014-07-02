@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Named;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import br.ufes.inf.lprm.ciclovix.dao.AnotacaoDAO;
 import br.ufes.inf.lprm.ciclovix.dao.CategoriaDAO;
@@ -18,25 +18,28 @@ import br.ufes.inf.lprm.ciclovix.entities.Local;
 import br.ufes.inf.lprm.ciclovix.entities.Mapa;
 import br.ufes.inf.lprm.ciclovix.entities.Pessoa;
 
-@Named
+@ManagedBean
 @SessionScoped
 public class MapaMB implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/*
+	 * DAOs
+	 */
 	@EJB
 	MapaDAO daoMapa;
 	@EJB
 	CategoriaDAO daoCategoria;
 	@EJB
-	PessoaDAO daoPessoa;	
+	PessoaDAO daoPessoa;
 	@EJB
 	AnotacaoDAO daoAnotacao;
 	@EJB
 	LocalDAO daoLocal;
 
 	public String getTest() throws Exception {
-		
+
 		/*
 		 * SALVANDO MAPA
 		 */
@@ -46,7 +49,7 @@ public class MapaMB implements Serializable {
 		mapa.setOntologia("ciclovix");
 
 		daoMapa.salvar(mapa);
-		
+
 		/*
 		 * SALVANDO CATEGORIA DE ANOTACAO
 		 */
@@ -86,7 +89,7 @@ public class MapaMB implements Serializable {
 		local.setLongitude(0);
 
 		daoLocal.salvar(local);
-		
+
 		return "Test!";
 	}
 }

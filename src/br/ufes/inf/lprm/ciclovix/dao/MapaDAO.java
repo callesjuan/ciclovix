@@ -15,4 +15,9 @@ public class MapaDAO extends EntidadeDAO<Mapa> {
 	public EntityManager getEntityManager() {
 		return em;
 	}
+
+	@Override
+	public Class<Mapa> getDomainClass() {
+		return Mapa.class;
+	}
 }

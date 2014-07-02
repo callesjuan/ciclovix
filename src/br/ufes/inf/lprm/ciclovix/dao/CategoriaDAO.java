@@ -15,4 +15,9 @@ public class CategoriaDAO extends EntidadeDAO<Categoria> {
 	public EntityManager getEntityManager() {
 		return em;
 	}
+
+	@Override
+	public Class<Categoria> getDomainClass() {
+		return Categoria.class;
+	}
 }

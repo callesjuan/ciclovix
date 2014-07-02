@@ -11,6 +11,8 @@ public abstract class EntidadeDAO<T extends Entidade> {
 
 	public abstract EntityManager getEntityManager();
 
+	public abstract Class<T> getDomainClass();
+
 	public T salvar(T obj) throws Exception {
 		try {
 			// getEntityManager().getTransaction().begin();
@@ -26,9 +28,10 @@ public abstract class EntidadeDAO<T extends Entidade> {
 		return obj;
 	}
 
-	public void excluir(T obj) throws Exception {
+	public void excluir(Long id) throws Exception {
 		try {
 			// getEntityManager().getTransaction().begin();
+			T obj = this.obter(id);
 			getEntityManager().remove(obj);
 			// getEntityManager().getTransaction().commit();
 		} catch (Exception ex) {
@@ -36,18 +39,20 @@ public abstract class EntidadeDAO<T extends Entidade> {
 		}
 	}
 
-	public T consultar(T obj) throws Exception {
+	public T obter(Long id) throws Exception {
 		try {
-			return (T) getEntityManager().find(obj.getClass(), obj.getId());
+			return (T) getEntityManager().find(getDomainClass(), id);
 		} catch (Exception ex) {
 			throw ex;
 		}
 	}
 
-	public List<T> buscar(T obj) throws Exception {
+	public List<T> listar() throws Exception {
 		try {
-			Query q = getEntityManager().createQuery(
-					"SELECT t FROM " + obj.getClass().getSimpleName() + " t ");
+			Query q = getEntityManager()
+					.createQuery(
+							"SELECT t FROM " + getDomainClass().getSimpleName()
+									+ " t ");
 			return q.getResultList();
 		} catch (Exception ex) {
 			throw ex;

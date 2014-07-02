@@ -15,4 +15,10 @@ public class PessoaDAO extends EntidadeDAO<Pessoa> {
 	public EntityManager getEntityManager() {
 		return em;
 	}
+
+	@Override
+	public Class<Pessoa> getDomainClass() {
+		return Pessoa.class;
+	}
+
 }
