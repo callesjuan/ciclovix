@@ -4,43 +4,31 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui" template="decorator.xhtml">
+	template="decorator.xhtml">
 
-	<ui:define name="titulo">Cadastro de usuarios</ui:define>
-	<ui:define name="h1">Lista de usuarios</ui:define>
+	<ui:define name="titulo">Cadastro de mapas</ui:define>
+	<ui:define name="h1">Lista de mapas</ui:define>
 
 	<ui:define name="contents">
-		<h:dataTable var="usuario" value="#{usuarioMB.listarUsuarios}">
+		<h:dataTable var="mapa" value="#{mapaMB.listarMapas}">
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="nome" />
 				</f:facet>
-				<h:outputText value="#{usuario.nome}" />
+				<h:outputText value="#{mapa.nome}" />
 			</h:column>
 			<h:column>
 				<f:facet name="header">
-					<h:outputText value="sobrenome" />
+					<h:outputText value="descricao" />
 				</f:facet>
-				<h:outputText value="#{usuario.sobrenome}" />
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="twitter" />
-				</f:facet>
-				<h:outputText value="#{usuario.contaTwitter}" />
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="facebook" />
-				</f:facet>
-				<h:outputText value="#{usuario.contaFace}" />
+				<h:outputText value="#{mapa.descricao}" />
 			</h:column>
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="modificar" />
 				</f:facet>
 				<h:form>
-					<h:commandButton action="#{usuarioMB.prepararAlterarUsuario}"
+					<h:commandButton action="#{mapaMB.prepararAlterarMapa}"
 						value="modificar" />
 				</h:form>
 			</h:column>
@@ -49,17 +37,15 @@
 					<h:outputText value="apagar" />
 				</f:facet>
 				<h:form>
-					<h:commandButton action="#{usuarioMB.excluirUsuario}"
+					<h:commandButton action="#{mapaMB.excluirMapa}"
 						value="apagar" />
 				</h:form>
 			</h:column>
 		</h:dataTable>
 		<br />
 		<h:form>
-			<h:commandLink value="novo usuario"
-				action="#{usuarioMB.prepararAdicionarUsuario}" />
+			<h:commandLink value="novo mapa"
+				action="#{mapaMB.prepararAdicionarMapa}" />
 		</h:form>
-		<br />
-		<p:spinner />
 	</ui:define>
 </ui:composition>

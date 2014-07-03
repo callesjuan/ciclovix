@@ -25,4 +25,12 @@ public class Categoria extends Entidade {
 	public void setTipo(int tipo) {
 		this.tipo = tipo;
 	}
+
+	public Mapa getMapa() {
+		return mapa;
+	}
+
+	public void setMapa(Mapa mapa) {
+		this.mapa = mapa;
+	}
 }

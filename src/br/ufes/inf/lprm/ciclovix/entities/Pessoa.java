@@ -12,7 +12,7 @@ public class Pessoa extends Entidade {
 	String sobrenome;
 	String contaFace;
 	String contaTwitter;
-	@ManyToMany(mappedBy="autores")
+	@ManyToMany(mappedBy = "autores", fetch = FetchType.EAGER)
 	List<Anotacao> anotacoes;
 
 	public String getNome() {

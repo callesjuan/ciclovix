@@ -3,6 +3,7 @@ package br.ufes.inf.lprm.ciclovix.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -13,14 +14,14 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Anotacao extends Entidade {
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	Mapa mapa;
-	@ManyToMany(targetEntity = Pessoa.class)
+	@ManyToMany(targetEntity = Pessoa.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "PessoaAnotacao", joinColumns = @JoinColumn(name = "anotacao"), inverseJoinColumns = @JoinColumn(name = "autor"))
 	List<Pessoa> autores;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	Categoria categoria;
-	@OneToMany(mappedBy = "anotacao", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "anotacao", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	List<Local> locais;
 	String nome;
 	long timestamp;
@@ -99,7 +100,7 @@ public class Anotacao extends Entidade {
 	public void setReanotacao(int reanotacao) {
 		this.reanotacao = reanotacao;
 	}
-	
+
 	public void addAutor(Pessoa autor) {
 		if (autores == null) {
 			autores = new ArrayList<Pessoa>();

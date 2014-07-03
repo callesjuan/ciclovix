@@ -6,7 +6,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Local extends Entidade {
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	Anotacao anotacao;
 	long latitude;
 	long longitude;
