@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
@@ -137,10 +138,10 @@ public class MapaMB implements Serializable {
 	}
 
 	public String prepararAdicionarAnotacao() {
-		AnotacaoMB anotacaoMB = (AnotacaoMB) FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestMap().get("anotacaoMB");
-		anotacaoMB.setMapa(this.mapa);
-		return "visualizar_categoria";
+		// AnotacaoMB anotacaoMB = (AnotacaoMB)
+		// FacesContext.getCurrentInstance()
+		// .getExternalContext().getRequestMap().get("anotacaoMB");
+		return "listar_anotacoes";
 	}
 
 }

@@ -11,59 +11,17 @@
 
 	<ui:define name="contents">
 		<h:form>
+		Mapa: <h:outputLabel value="#{anotacaoMB.anotacao.mapa.nome}" />
+			<br />
 Nome: <h:inputText value="#{anotacaoMB.anotacao.nome}" />
 			<br />
-Descricao: <h:inputText value="#{anotacaoMB.anotacao.descricao}" />
+Categoria: <h:selectOneMenu value="#{anotacaoMB.anotacao.categoria}">
+				<f:selectItems value="#{anotacaoMB.anotacao.mapa.categorias}" />
+			</h:selectOneMenu>
 			<br />
-Ontologia: <h:inputText value="#{mapaMB.mapa.ontologia}" />
+			<h:commandButton action="#{anotacaoMB.salvarAnotacao}" value="salvar" />
 			<br />
-			<h:commandButton action="#{mapaMB.salvarMapa}" value="salvar" />
-			<br />
-			<h:commandLink action="listar_mapas" value="Voltar" />
+			<h:commandLink action="listar_anotacoes" value="Voltar" />
 		</h:form>
-		<br />
-
-		<!-- 		TABELA DE CATEGORIAS DE UM MAPA -->
-
-		<c:if test="#{mapaMB.exibirCategorias eq 1}">
-			<h2>Lista de categorias</h2>
-			<h:dataTable var="categoria" value="#{mapaMB.listarCategorias}">
-				<h:column>
-					<f:facet name="header">
-						<h:outputText value="nome" />
-					</f:facet>
-					<h:outputText value="#{categoria.nome}" />
-				</h:column>
-				<h:column>
-					<f:facet name="header">
-						<h:outputText value="tipo" />
-					</f:facet>
-					<h:outputText value="#{categoria.tipo}" />
-				</h:column>
-				<h:column>
-					<f:facet name="header">
-						<h:outputText value="modificar" />
-					</f:facet>
-					<h:form>
-						<h:commandButton action="#{mapaMB.prepararAlterarCategoria}"
-							value="modificar" />
-					</h:form>
-				</h:column>
-				<h:column>
-					<f:facet name="header">
-						<h:outputText value="apagar" />
-					</f:facet>
-					<h:form>
-						<h:commandButton action="#{mapaMB.excluirCategoria}"
-							value="apagar" />
-					</h:form>
-				</h:column>
-			</h:dataTable>
-			<br />
-			<h:form>
-				<h:commandLink value="nova categoria"
-					action="#{mapaMB.prepararAdicionarCategoria}" />
-			</h:form>
-		</c:if>
 	</ui:define>
 </ui:composition>

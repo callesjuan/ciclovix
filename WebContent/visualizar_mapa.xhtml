@@ -19,6 +19,12 @@ Ontologia: <h:inputText value="#{mapaMB.mapa.ontologia}" />
 			<br />
 			<h:commandButton action="#{mapaMB.salvarMapa}" value="salvar" />
 			<br />
+			<!-- 						<h:link outcome="listar_anotacoes" value="anotacoes"> -->
+			<!-- 							<f:param name="mapa" value="#{mapaMB.mapa.id}" /> -->
+			<!-- 						</h:link> -->
+			<h:commandButton action="#{mapaMB.prepararAdicionarAnotacao}"
+				value="anotacoes" />
+			<br />
 			<h:commandLink action="listar_mapas" value="Voltar" />
 		</h:form>
 		<br />

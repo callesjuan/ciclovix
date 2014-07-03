@@ -2,14 +2,17 @@ package br.ufes.inf.lprm.ciclovix.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 
 import br.ufes.inf.lprm.ciclovix.dao.AnotacaoDAO;
+import br.ufes.inf.lprm.ciclovix.dao.CategoriaDAO;
 import br.ufes.inf.lprm.ciclovix.dao.LocalDAO;
 import br.ufes.inf.lprm.ciclovix.entities.Anotacao;
 import br.ufes.inf.lprm.ciclovix.entities.Categoria;
@@ -23,6 +26,9 @@ public class AnotacaoMB implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@ManagedProperty(value = "#{mapaMB}")
+	MapaMB mapaMB;
+
 	/*
 	 * DAOs
 	 */
@@ -30,9 +36,12 @@ public class AnotacaoMB implements Serializable {
 	AnotacaoDAO daoAnotacao;
 	@EJB
 	LocalDAO daoLocal;
+	@EJB
+	CategoriaDAO daoCategoria;
 
 	Mapa mapa;
 	Anotacao anotacao;
+	List<Categoria> categorias;
 	DataModel<Anotacao> listaAnotacoes;
 
 	public Anotacao getAnotacao() {
@@ -62,8 +71,7 @@ public class AnotacaoMB implements Serializable {
 
 	public String prepararAdicionarAnotacao() {
 		this.anotacao = new Anotacao();
-		this.anotacao.setMapa(this.mapa);
-		this.anotacao.setCategoria(new Categoria());
+		this.anotacao.setMapa(this.mapaMB.mapa);
 		this.anotacao.setLocais(new ArrayList<Local>());
 		this.anotacao.setAutores(new ArrayList<Pessoa>());
 		return "visualizar_anotacao";
