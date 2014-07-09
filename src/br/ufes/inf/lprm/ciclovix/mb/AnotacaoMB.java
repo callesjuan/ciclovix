@@ -62,7 +62,8 @@ public class AnotacaoMB implements Serializable {
 
 	public DataModel<Anotacao> getListarAnotacoes() {
 		try {
-			this.listaAnotacoes = new ListDataModel(this.mapa.getAnotacoes());
+			this.listaAnotacoes = new ListDataModel(
+					this.mapaMB.mapa.getAnotacoes());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -100,6 +101,14 @@ public class AnotacaoMB implements Serializable {
 			e.printStackTrace();
 		}
 		return "listar_anotacoes";
+	}
+
+	public MapaMB getMapaMB() {
+		return mapaMB;
+	}
+
+	public void setMapaMB(MapaMB mapaMB) {
+		this.mapaMB = mapaMB;
 	}
 
 }
