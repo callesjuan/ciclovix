@@ -7,7 +7,6 @@
 		<jta-data-source>java:jboss/datasources/ciclovixDS</jta-data-source>
 		<class>br.ufes.inf.lprm.ciclovix.entities.Entidade</class>
 		<class>br.ufes.inf.lprm.ciclovix.entities.Pessoa</class>
-		<class>br.ufes.inf.lprm.ciclovix.entities.Mapa</class>
 		<class>br.ufes.inf.lprm.ciclovix.entities.Anotacao</class>
 		<class>br.ufes.inf.lprm.ciclovix.entities.Categoria</class>
 		<class>br.ufes.inf.lprm.ciclovix.entities.Local</class>

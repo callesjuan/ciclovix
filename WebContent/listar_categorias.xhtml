@@ -6,29 +6,29 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	template="decorator.xhtml">
 
-	<ui:define name="titulo">Cadastro de mapas</ui:define>
-	<ui:define name="h1">Lista de mapas</ui:define>
+	<ui:define name="titulo">Cadastro de categorias</ui:define>
+	<ui:define name="h1">Lista de categorias</ui:define>
 
 	<ui:define name="contents">
-		<h:dataTable var="mapa" value="#{mapaMB.listarMapas}">
+		<h:dataTable var="categoria" value="#{categoriaMB.listarCategorias}">
 			<h:column>
-				<f:facet name="header">
-					<h:outputText value="nome" />
-				</f:facet>
-				<h:outputText value="#{mapa.nome}" />
-			</h:column>
-			<h:column>
-				<f:facet name="header">
-					<h:outputText value="descricao" />
-				</f:facet>
-				<h:outputText value="#{mapa.descricao}" />
-			</h:column>
+					<f:facet name="header">
+						<h:outputText value="nome" />
+					</f:facet>
+					<h:outputText value="#{categoria.nome}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="tipo" />
+					</f:facet>
+					<h:outputText value="#{categoria.tipo}" />
+				</h:column>
 			<h:column>
 				<f:facet name="header">
 					<h:outputText value="modificar" />
 				</f:facet>
 				<h:form>
-					<h:commandButton action="#{mapaMB.prepararAlterarMapa}"
+					<h:commandButton action="#{categoriaMB.prepararAlterarCategoria}"
 						value="modificar" />
 				</h:form>
 			</h:column>
@@ -37,15 +37,15 @@
 					<h:outputText value="apagar" />
 				</f:facet>
 				<h:form>
-					<h:commandButton action="#{mapaMB.excluirMapa}"
+					<h:commandButton action="#{categoriaMB.excluirCategoria}"
 						value="apagar" />
 				</h:form>
 			</h:column>
 		</h:dataTable>
 		<br />
 		<h:form>
-			<h:commandLink value="novo mapa"
-				action="#{mapaMB.prepararAdicionarMapa}" />
+			<h:commandLink value="novo categoria"
+				action="#{categoriaMB.prepararAdicionarCategoria}" />
 		</h:form>
 	</ui:define>
 </ui:composition>

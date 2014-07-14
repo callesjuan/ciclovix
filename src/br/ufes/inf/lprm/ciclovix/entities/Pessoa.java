@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Pessoa extends Entidade {
@@ -12,7 +13,7 @@ public class Pessoa extends Entidade {
 	String sobrenome;
 	String contaFace;
 	String contaTwitter;
-	@ManyToMany(mappedBy = "autores", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "autor", fetch = FetchType.EAGER)
 	List<Anotacao> anotacoes;
 
 	public String getNome() {

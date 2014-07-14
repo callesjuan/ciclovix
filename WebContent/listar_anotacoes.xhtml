@@ -14,7 +14,7 @@
 				<f:facet name="header">
 					<h:outputText value="categoria" />
 				</f:facet>
-				<h:outputText value="#{anotacao.categoria}" />
+				<h:outputText value="#{anotacao.categoria.nome}" />
 			</h:column>
 			<h:column>
 				<f:facet name="header">
@@ -46,7 +46,6 @@
 			<h:commandLink value="nova anotacao"
 				action="#{anotacaoMB.prepararAdicionarAnotacao}" />
 			<br />
-			<h:commandLink action="listar_mapas" value="Voltar" />
 		</h:form>
 	</ui:define>
 </ui:composition>

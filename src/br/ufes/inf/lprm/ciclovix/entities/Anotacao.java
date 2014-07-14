@@ -4,46 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Anotacao extends Entidade {
 	@ManyToOne(fetch = FetchType.EAGER)
-	Mapa mapa;
-	@ManyToMany(targetEntity = Pessoa.class, fetch = FetchType.EAGER)
-	@JoinTable(name = "PessoaAnotacao", joinColumns = @JoinColumn(name = "anotacao"), inverseJoinColumns = @JoinColumn(name = "autor"))
-	List<Pessoa> autores;
+	@JoinColumn(nullable = true)
+	Pessoa autor;
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(nullable = true)
 	Categoria categoria;
 	@OneToMany(mappedBy = "anotacao", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	List<Local> locais;
 	String nome;
+	@Column(nullable = true)
 	long timestamp;
+	@Column(nullable = true)
 	int positivo;
+	@Column(nullable = true)
 	int negativo;
-	int reanotacao;
-
-	public Mapa getMapa() {
-		return mapa;
-	}
-
-	public void setMapa(Mapa mapa) {
-		this.mapa = mapa;
-	}
-
-	public List<Pessoa> getAutores() {
-		return autores;
-	}
-
-	public void setAutores(List<Pessoa> autores) {
-		this.autores = autores;
-	}
 
 	public Categoria getCategoria() {
 		return categoria;
@@ -91,20 +75,5 @@ public class Anotacao extends Entidade {
 
 	public void setNegativo(int negativo) {
 		this.negativo = negativo;
-	}
-
-	public int getReanotacao() {
-		return reanotacao;
-	}
-
-	public void setReanotacao(int reanotacao) {
-		this.reanotacao = reanotacao;
-	}
-
-	public void addAutor(Pessoa autor) {
-		if (autores == null) {
-			autores = new ArrayList<Pessoa>();
-		}
-		this.autores.add(autor);
 	}
 }
