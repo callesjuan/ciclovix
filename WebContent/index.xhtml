@@ -1,0 +1,109 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    	<link href="style.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true" />
+        <title>GMap</title>
+    </h:head>
+    <h:body>  
+	        <p:growl id="messages" showDetail="true" />
+	        
+	        <p:breadCrumb>
+			    <p:menuitem value="home" url="#" />
+			    <p:menuitem value="Adicionar Informação" url="#" disabled="false"/>
+			    <p:menuitem value="Contatos" url="#" disabled="false"/>
+			    <p:menuitem value="Base de dados" url="#" disabled="false"/>
+			    <p:menuitem value="Sair" url="#" disabled="false"/>
+			    <p:menuitem value="Logar" url="#" disabled="false"/>			    
+			</p:breadCrumb>
+
+			<p:layout style="height:90%;">
+				<p:layoutUnit position="west">
+					<h:form>
+					    <p:growl id="msg" />
+					 	
+					 	<h:outputText value="Filtre por Categoria:" />
+					 	
+					    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">					 
+					        
+					        <p:selectBooleanCheckbox value="#{selectBooleanView.value2}">
+					            <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" />
+					        </p:selectBooleanCheckbox>
+					        <h:outputText value="Acidentes:" />			
+					    
+					    	<p:selectBooleanCheckbox value="#{selectBooleanView.value2}">
+					            <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" />
+					        </p:selectBooleanCheckbox>
+					        <h:outputText value="Bicicletas Públicas" />	
+					        
+					        <p:selectBooleanCheckbox value="#{selectBooleanView.value2}">
+					            <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" />
+					        </p:selectBooleanCheckbox>
+					        <h:outputText value="Bicicletários:" />	
+					        
+					        <p:selectBooleanCheckbox value="#{selectBooleanView.value2}">
+					            <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" />
+					        </p:selectBooleanCheckbox>
+					        <h:outputText value="Ciclofaixas:" />	
+					        
+					        <p:selectBooleanCheckbox value="#{selectBooleanView.value2}">
+					            <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" />
+					        </p:selectBooleanCheckbox>
+					        <h:outputText value="Ciclovias:" />	
+					        
+					        <p:selectBooleanCheckbox value="#{selectBooleanView.value2}">
+					            <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" />
+					        </p:selectBooleanCheckbox>
+					        <h:outputText value="Eventos:" />	
+					        
+					        <p:selectBooleanCheckbox value="#{selectBooleanView.value2}">
+					            <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" />
+					        </p:selectBooleanCheckbox>
+					        <h:outputText value="Oficinas/Lojas:" />	
+					        
+					        <p:selectBooleanCheckbox value="#{selectBooleanView.value2}">
+					            <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" />
+					        </p:selectBooleanCheckbox>
+					        <h:outputText value="Rotas Alternativas:" />	
+					        
+					        <p:selectBooleanCheckbox value="#{selectBooleanView.value2}">
+					            <p:ajax update="msg" listener="#{selectBooleanView.addMessage}" />
+					        </p:selectBooleanCheckbox>
+					        <h:outputText value="Vias Poribidas:" />	
+					        
+					    </h:panelGrid>
+					</h:form>
+					
+					<h:outputText value="Informações da Cidade:" />
+					
+					<p:panelGrid columns="2">
+					    <f:facet name="header">
+					        <p:graphicImage name="Bandeira.png" />
+					    </f:facet>
+					 
+					    <h:outputText value="Cidade:" />
+					    <h:outputText value="???" />
+					 
+					    <h:outputText value="População:" />
+					    <h:outputText value="???" />
+					 
+					    <h:outputText value="Info 3:" />
+					    <h:outputText value="???" />
+					 
+					    <h:outputText value="info 4:" />
+					    <h:outputText value="???" />
+					</p:panelGrid>					
+
+
+				</p:layoutUnit>
+			
+				<p:layoutUnit position="center">
+					<p:gmap id="gmap" center="-20.2722883,-40.3026116" zoom="13" type="HYBRID" styleClass="mapClass"
+					    model="#{addMarkersView.emptyModel}" onPointClick="handlePointClick(event);" widgetVar="map" />
+					</p:layoutUnit>
+			</p:layout>
+
+    </h:body>
+</html>
