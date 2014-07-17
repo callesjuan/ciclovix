@@ -12,15 +12,18 @@
 	        
 	        <p:breadCrumb>
 			    <p:menuitem value="home" url="#" />
-			    <p:menuitem value="Adicionar Informação" url="#" disabled="false"/>
-			    <p:menuitem value="Contatos" url="#" disabled="false"/>
-			    <p:menuitem value="Base de dados" url="#" disabled="false"/>
-			    <p:menuitem value="Sair" url="#" disabled="false"/>
-			    <p:menuitem value="Logar" url="#" disabled="false"/>			    
+			    <p:menuitem value="Adicionar Informação" url="#" rendered="#{auth.logado}"/>
+			    <p:menuitem value="Contatos" url="#" rendered="true"/>
+			    <p:menuitem value="Base de dados" url="#" rendered="true"/>
+			    <p:menuitem value="Sair" url="#{userMB.invalidate()}" rendered="#{auth.logado}"/>
+			    <p:menuitem value="Logar" url="login.xhtml" rendered="#{auth.deslogado}"/>			    
 			</p:breadCrumb>
 
 			<p:layout style="height:90%;">
 				<p:layoutUnit position="west">
+				
+					<h:outputText value="#{auth.pessoa.nome}" />
+				
 					<h:form>
 					    <p:growl id="msg" />
 					 	

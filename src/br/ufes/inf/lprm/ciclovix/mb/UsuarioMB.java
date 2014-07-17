@@ -2,6 +2,7 @@ package br.ufes.inf.lprm.ciclovix.mb;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -10,13 +11,13 @@ import br.ufes.inf.lprm.ciclovix.dao.PessoaDAO;
 import br.ufes.inf.lprm.ciclovix.entities.Pessoa;
 
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class UsuarioMB {
 
 	@EJB
 	PessoaDAO daoPessoa;
 
-	Pessoa usuario;
+	Pessoa usuario = new Pessoa();
 
 	DataModel<Pessoa> listaUsuarios;
 
@@ -35,11 +36,6 @@ public class UsuarioMB {
 			e.printStackTrace();
 		}
 		return this.listaUsuarios;
-	}
-
-	public String prepararAdicionarUsuario() {
-		this.usuario = new Pessoa();
-		return "visualizar_usuario";
 	}
 
 	public String prepararAlterarUsuario() {
@@ -63,7 +59,7 @@ public class UsuarioMB {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "listar_usuarios";
+		return "index";
 	}
 
 }
