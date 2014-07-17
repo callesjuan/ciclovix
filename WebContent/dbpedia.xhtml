@@ -3,21 +3,24 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html" template="decorator.xhtml">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="decorator.xhtml">
 
 	<ui:define name="titulo">DBpedia</ui:define>
 	<ui:define name="h1">Teste</ui:define>
 
 	<ui:define name="contents">
+		<p:messages id="msgs" />
 		<h:form>
-Query: <h:inputTextarea value="#{dbpediaMB.queryString}" rows="10"
-				cols="100" />
+Query: <h:inputTextarea value="#{dbpediaMB.latlng}" rows="10" cols="100" />
 			<br />
-			Result: <h:inputTextarea value="#{dbpediaMB.resultString}" rows="10"
-				cols="100" />
+			Result: <h:inputTextarea id="result" value="#{dbpediaMB.qComment}"
+				rows="10" cols="100" />
 			<br />
-			<h:commandButton action="#{dbpediaMB.snippet}" value="query" />
+			<h:commandButton actionListener="#{dbpediaMB.snippet}" value="query" />
 			<br />
+			<p:commandButton update="result"
+				actionListener="#{dbpediaMB.snippet}" value="query2" />
 		</h:form>
 	</ui:define>
 </ui:composition>

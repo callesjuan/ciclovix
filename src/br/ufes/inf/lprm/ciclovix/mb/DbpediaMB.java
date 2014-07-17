@@ -3,8 +3,11 @@ package br.ufes.inf.lprm.ciclovix.mb;
 import java.io.Serializable;
 import java.net.URI;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,39 +24,94 @@ import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 
 @ManagedBean
-@SessionScoped
 public class DbpediaMB implements Serializable {
 
-	String queryString;
-	String resultString;
+	String latlng;
 
-	public String getQueryString() {
-		return queryString;
+	RDFNode qRes;
+	String qName;
+	String qOfficial;
+	String qComment;
+	String qArea;
+	String qPopulation;
+	String qThumb;
+
+	public String getLatlng() {
+		return latlng;
 	}
 
-	public void setQueryString(String queryString) {
-		this.queryString = queryString;
+	public void setLatlng(String latlng) {
+		this.latlng = latlng;
 	}
 
-	public String getResultString() {
-		return resultString;
+	public RDFNode getqRes() {
+		return qRes;
 	}
 
-	public void setResultString(String resultString) {
-		this.resultString = resultString;
+	public void setqRes(RDFNode qRes) {
+		this.qRes = qRes;
 	}
 
-	public String snippet() {
-		String geo = this.geocode(this.queryString);
-		String snippet = dbpedia(geo);
+	public String getqName() {
+		return qName;
+	}
 
-		this.resultString = snippet;
+	public void setqName(String qName) {
+		this.qName = qName;
+	}
 
-		return "dbpedia";
+	public String getqOfficial() {
+		return qOfficial;
+	}
+
+	public void setqOfficial(String qOfficial) {
+		this.qOfficial = qOfficial;
+	}
+
+	public String getqComment() {
+		return qComment;
+	}
+
+	public void setqComment(String qComment) {
+		this.qComment = qComment;
+	}
+
+	public String getqArea() {
+		return qArea;
+	}
+
+	public void setqArea(String qArea) {
+		this.qArea = qArea;
+	}
+
+	public String getqPopulation() {
+		return qPopulation;
+	}
+
+	public void setqPopulation(String qPopulation) {
+		this.qPopulation = qPopulation;
+	}
+
+	public String getqThumb() {
+		return qThumb;
+	}
+
+	public void setqThumb(String qThumb) {
+		this.qThumb = qThumb;
+	}
+
+	public void snippet() {
+		String geo = this.geocode(this.latlng);
+		dbpedia(geo);
+
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		context.addMessage(null, new FacesMessage("Successful", qComment));
 	}
 
 	private String geocode(String latlng) {
@@ -69,7 +127,7 @@ public class DbpediaMB implements Serializable {
 
 			URI url = (new URIBuilder(
 					"http://maps.googleapis.com/maps/api/geocode/json"))
-					.addParameter("latlng", this.queryString).build();
+					.addParameter("latlng", this.latlng).build();
 
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet(url);
@@ -113,53 +171,57 @@ public class DbpediaMB implements Serializable {
 		return cidade + ";" + estado;
 	}
 
-	private String dbpedia(String geo) {
+	private void dbpedia(String geo) {
 
 		String[] local = geo.split(";");
 		String cidade = local[0];
 		String estado = local[1];
-
-		String snippet = null;
 
 		String format = "PREFIX schema: <http://schema.org/>"
 				+ "  PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>"
 				+ "  PREFIX dbpprop: <http://dbpedia.org/property/>"
 				+ "  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 				+ "  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
-				+ "  SELECT DISTINCT ?cidade ?pop"
+				+ "  SELECT DISTINCT ?res ?name ?official ?comment ?area ?population ?thumb"
 				+ "  WHERE {"
-				+ "    ?cidade dbpedia-owl:populationTotal ?pop;"
-				+ "      rdf:type dbpedia-owl:Place;"
+				+ "    ?res rdf:type dbpedia-owl:Place;"
 				+ "      rdf:type dbpedia-owl:Settlement;"
-				+ "      dbpedia-owl:abstract ?abstract;"
-				+ "      dbpprop:mapCaption ?state;"
+				+ "      rdfs:comment ?comment;"
+				+ "      dbpedia-owl:areaTotal ?area;"
+				+ "      dbpedia-owl:populationTotal ?population;"
 				+ "      rdfs:label ?city"
-				+ "      FILTER ( regex(?city, \"%s\", \"i\" ) && langMatches( lang(?abstract), \"PT\" ) && regex(?state, \"%s\", \"i\") )"
-				+ "}";
+				+ "  FILTER ( regex(?city, \"%s\", \"i\" ) && langMatches( lang(?comment), \"PT\" ) && regex(?comment, \"%s\", \"i\") )"
+				+ "  OPTIONAL { ?res dbpprop:name ?name }"
+				+ "  OPTIONAL { ?res dbpprop:officialName ?official }"
+				+ "  OPTIONAL { ?res dbpedia-owl:thumbnail ?thumb }" + "}";
 		String queryString = String.format(format, cidade, estado);
 
-		// now creating query object
 		Query query = QueryFactory.create(queryString);
-		// initializing queryExecution factory with remote service.
-		// **this actually was the main problem I couldn't figure out.**
+
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(
 				"http://dbpedia.org/sparql", query);
 
-		// after it goes standard query execution and result processing which
-		// can
-		// be found in almost any Jena/SPARQL tutorial.
 		try {
-			ResultSet results = qexec.execSelect();
-			for (; results.hasNext();) {
-				// Result processing is done here.
-				break;
+			ResultSet rs = qexec.execSelect();
+			if (rs.hasNext()) {
+				QuerySolution sol = rs.nextSolution();
+				qRes = sol.get("res");
+				qName = sol.contains("name") ? sol.get("name").asLiteral()
+						.getString() : "";
+				qOfficial = sol.contains("official") ? sol.get("official")
+						.asLiteral().getString() : "";
+				qComment = sol.get("comment").asLiteral().getString();
+				qArea = sol.get("area").asLiteral().getString();
+				qPopulation = sol.get("population").asLiteral().getString();
+				qThumb = sol.contains("thumb") ? sol.get("thumb").asResource().getURI() : "";
+			} else {
+				qComment = "Cidade desconhecida...";
 			}
-
-			snippet = ResultSetFormatter.asText(results);
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
+
 			qexec.close();
 		}
-
-		return snippet;
 	}
 }
