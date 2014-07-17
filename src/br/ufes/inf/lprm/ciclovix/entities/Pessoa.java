@@ -14,6 +14,7 @@ public class Pessoa extends Entidade {
 	String sobrenome;
 	String contaFace;
 	String contaTwitter;
+	int tipo;
 	@OneToMany(mappedBy = "autor", fetch = FetchType.EAGER)
 	List<Anotacao> anotacoes;
 
@@ -64,4 +65,13 @@ public class Pessoa extends Entidade {
 	public void setAnotacoes(List<Anotacao> anotacoes) {
 		this.anotacoes = anotacoes;
 	}
+
+	public int getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
+	
 }

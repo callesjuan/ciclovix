@@ -56,6 +56,7 @@ public class UsuarioMB {
 	public String salvarUsuario() {
 		try {
 			this.daoPessoa.salvar(usuario);
+			usuario = new Pessoa();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

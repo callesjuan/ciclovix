@@ -12,7 +12,7 @@
 	        
 	        <p:breadCrumb>
 			    <p:menuitem value="home" url="#" />
-			    <p:menuitem value="Adicionar Informação" url="#" rendered="#{auth.logado}"/>
+			    <p:menuitem value="Adicionar Informação" url="addMarker.xhtml" rendered="#{auth.logado}"/>
 			    <p:menuitem value="Contatos" url="#" rendered="true"/>
 			    <p:menuitem value="Base de dados" url="#" rendered="true"/>
 			    <p:menuitem value="Sair" url="#{userMB.invalidate()}" rendered="#{auth.logado}"/>
@@ -102,10 +102,22 @@
 
 				</p:layoutUnit>
 			
-				<p:layoutUnit position="center">
-					<p:gmap id="gmap" center="-20.2722883,-40.3026116" zoom="13" type="HYBRID" styleClass="mapClass"
-					    model="#{addMarkersView.emptyModel}" onPointClick="handlePointClick(event);" widgetVar="map" />
-					</p:layoutUnit>
+				<p:layoutUnit position="center">					
+					<p:gmap id="gmap" center="-20.2722883,-40.3026116" zoom="13" type="HYBRID" styleClass="mapClass" 
+						model="#{anotacaoMB.markers}">
+						<p:ajax event="overlaySelect" listener="#{anotacaoMB.onMarkerSelect}" />
+						
+						<p:gmapInfoWindow id="infoWindow">
+							<p:outputPanel style="text-align: center; display: block; margin: auto">
+								
+								<h:outputText value="#{anotacaoMB.marker.title}" />
+								<h:outputText value="CASA" />
+								
+							</p:outputPanel>
+						</p:gmapInfoWindow>
+					
+					</p:gmap>					    
+				</p:layoutUnit>
 			</p:layout>
 
     </h:body>

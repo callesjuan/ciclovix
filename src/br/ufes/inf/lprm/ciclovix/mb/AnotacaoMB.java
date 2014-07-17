@@ -6,18 +6,22 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.event.map.OverlaySelectEvent;
+import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
+
 import br.ufes.inf.lprm.ciclovix.dao.AnotacaoDAO;
 import br.ufes.inf.lprm.ciclovix.dao.CategoriaDAO;
-import br.ufes.inf.lprm.ciclovix.dao.LocalDAO;
 import br.ufes.inf.lprm.ciclovix.entities.Anotacao;
 import br.ufes.inf.lprm.ciclovix.entities.Categoria;
-import br.ufes.inf.lprm.ciclovix.entities.Local;
-import br.ufes.inf.lprm.ciclovix.entities.Pessoa;
 
 @ManagedBean
 @SessionScoped
@@ -30,14 +34,16 @@ public class AnotacaoMB implements Serializable {
 	@EJB
 	AnotacaoDAO daoAnotacao;
 	@EJB
-	LocalDAO daoLocal;
-	@EJB
 	CategoriaDAO daoCategoria;
 
-	Anotacao anotacao;
+	Anotacao anotacao = new Anotacao();
 	long categoria;
 	List<SelectItem> categorias;
+	List<Anotacao> markers;
 	DataModel<Anotacao> listaAnotacoes;
+	
+	private Marker marker;
+	private MapModel simpleModel = new DefaultMapModel();;
 
 	public Anotacao getAnotacao() {
 		return this.anotacao;
@@ -77,12 +83,35 @@ public class AnotacaoMB implements Serializable {
 		}
 		return this.listaAnotacoes;
 	}
+	
+	public MapModel getMarkers() {
+		
+		try {
+			markers = daoAnotacao.listar();			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}							
+
+		for(Anotacao a : markers){
+			simpleModel.addOverlay( new Marker(new LatLng(a.getLongitude(), a.getLatitude()), a.getNome(), a ));
+		}
+		
+        return simpleModel;
+	}
+	
+	public void onMarkerSelect(OverlaySelectEvent event) {
+        marker = (Marker) event.getOverlay();
+    }
+	
+	public Marker getMarker() {
+        return marker;
+    }
 
 	public String prepararAdicionarAnotacao() {
 		this.anotacao = new Anotacao();
 		return "visualizar_anotacao";
 	}
-
+	
 	public String prepararAlterarAnotacao() {
 		this.anotacao = (Anotacao) (this.listaAnotacoes.getRowData());
 		this.categoria = this.anotacao.getCategoria().getId();
@@ -91,12 +120,15 @@ public class AnotacaoMB implements Serializable {
 
 	public String salvarAnotacao() {
 		try {
+			System.out.println("SALVAR ANOTAÇÂO");
 			this.anotacao.setCategoria(daoCategoria.obter(this.categoria));
 			this.daoAnotacao.salvar(this.anotacao);
+			anotacao = new Anotacao();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "listar_anotacoes";
+		return "index";
 	}
 
 	public String excluirAnotacao() {
