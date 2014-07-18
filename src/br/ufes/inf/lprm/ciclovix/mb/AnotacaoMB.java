@@ -1,6 +1,7 @@
 package br.ufes.inf.lprm.ciclovix.mb;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
@@ -26,8 +26,18 @@ import org.primefaces.model.map.Marker;
 
 import br.ufes.inf.lprm.ciclovix.dao.AnotacaoDAO;
 import br.ufes.inf.lprm.ciclovix.dao.CategoriaDAO;
+import br.ufes.inf.lprm.ciclovix.dao.PessoaDAO;
 import br.ufes.inf.lprm.ciclovix.entities.Anotacao;
 import br.ufes.inf.lprm.ciclovix.entities.Categoria;
+import br.ufes.inf.lprm.ciclovix.entities.Pessoa;
+
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
+import com.hp.hpl.jena.util.FileManager;
 
 @ManagedBean
 @SessionScoped
@@ -41,23 +51,34 @@ public class AnotacaoMB implements Serializable {
 	AnotacaoDAO daoAnotacao;
 	@EJB
 	CategoriaDAO daoCategoria;
+	@EJB
+	PessoaDAO daoPessoa;
 
 	Anotacao anotacao = new Anotacao();
 	long categoria;
 	List<SelectItem> categorias;
 	List<Anotacao> markers;
 	DataModel<Anotacao> listaAnotacoes;
-	
+
 	private Marker marker;
 	private MapModel simpleModel = new DefaultMapModel();
-	
+
 	private List<String> items;
 	List<Categoria> cats;
-	private Map<String,Boolean> checkMap = new HashMap<String,Boolean>();
+	private Map<String, Boolean> checkMap = new HashMap<String, Boolean>();
 
-	
+	private String dump;
+
+	public String getDump() {
+		return dump;
+	}
+
+	public void setDump(String dump) {
+		this.dump = dump;
+	}
+
 	@PostConstruct
-	public void init(){
+	public void init() {
 		simpleModel = new DefaultMapModel();
 		try {
 			items = new ArrayList<String>();
@@ -66,22 +87,23 @@ public class AnotacaoMB implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		for(Categoria c : cats){
+
+		for (Categoria c : cats) {
 			items.add(c.getNome());
 		}
 		for (String item : items) {
-			checkMap.put(item,Boolean.TRUE);
+			checkMap.put(item, Boolean.TRUE);
 		}
-		
+
 		try {
-			markers = daoAnotacao.listar();			
+			markers = daoAnotacao.listar();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}			
-		for(Anotacao a : markers){			
-			simpleModel.addOverlay( new Marker(new LatLng(a.getLongitude(), a.getLatitude()), a.getNome(), a ));
-		}	
+		}
+		for (Anotacao a : markers) {
+			simpleModel.addOverlay(new Marker(new LatLng(a.getLongitude(), a
+					.getLatitude()), a.getNome(), a));
+		}
 	}
 
 	public Anotacao getAnotacao() {
@@ -122,24 +144,24 @@ public class AnotacaoMB implements Serializable {
 		}
 		return this.listaAnotacoes;
 	}
-	
-	public MapModel getMarkers() {							
-        return simpleModel;
+
+	public MapModel getMarkers() {
+		return simpleModel;
 	}
-	
+
 	public void onMarkerSelect(OverlaySelectEvent event) {
-        marker = (Marker) event.getOverlay();
-    }
-	
+		marker = (Marker) event.getOverlay();
+	}
+
 	public Marker getMarker() {
-        return marker;
-    }
+		return marker;
+	}
 
 	public String prepararAdicionarAnotacao() {
 		this.anotacao = new Anotacao();
 		return "visualizar_anotacao";
 	}
-	
+
 	public String prepararAlterarAnotacao() {
 		this.anotacao = (Anotacao) (this.listaAnotacoes.getRowData());
 		this.categoria = this.anotacao.getCategoria().getId();
@@ -151,9 +173,11 @@ public class AnotacaoMB implements Serializable {
 			System.out.println("SALVAR ANOTAÇÂO");
 			this.anotacao.setCategoria(daoCategoria.obter(this.categoria));
 			this.daoAnotacao.salvar(this.anotacao);
-			simpleModel.addOverlay( new Marker(new LatLng(anotacao.getLongitude(), anotacao.getLatitude()), anotacao.getNome(), anotacao ));
+			simpleModel.addOverlay(new Marker(new LatLng(anotacao
+					.getLongitude(), anotacao.getLatitude()), anotacao
+					.getNome(), anotacao));
 			anotacao = new Anotacao();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -170,39 +194,121 @@ public class AnotacaoMB implements Serializable {
 		}
 		return "listar_anotacoes";
 	}
-	
+
 	public List<String> getItems() {
 		return items;
 	}
-	
+
 	public Map<String, Boolean> getCheckMap() {
 		return checkMap;
 	}
-	
-	public String filtro(){
-		for(Marker m : simpleModel.getMarkers()){
-			Anotacao note = (Anotacao)m.getData();		
-			
-			if(!checkMap.get(note.getCategoria().getNome())){
+
+	public String filtro() {
+		for (Marker m : simpleModel.getMarkers()) {
+			Anotacao note = (Anotacao) m.getData();
+
+			if (!checkMap.get(note.getCategoria().getNome())) {
 				m.setVisible(false);
-			}else{
+			} else {
 				m.setVisible(true);
 			}
 		}
 		return "index";
 	}
-	
+
 	public void onPointSelect(PointSelectEvent event) {
-        LatLng latlng = event.getLatLng();
-        
-        this.anotacao.setLatitude(latlng.getLng());
-        this.anotacao.setLongitude(latlng.getLat());
-        
-        addMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, "Point Selected", "Lat:" + latlng.getLat() + ", Lng:" + latlng.getLng()));
-    }
-	
+		LatLng latlng = event.getLatLng();
+
+		this.anotacao.setLatitude(latlng.getLng());
+		this.anotacao.setLongitude(latlng.getLat());
+
+		addMessage(new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Point Selected", "Lat:" + latlng.getLat() + ", Lng:"
+						+ latlng.getLng()));
+	}
+
 	public void addMessage(FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+
+	public String dumpAnotacoes() {
+
+		String dump = "";
+
+		String ns = "http://lprm.inf.ufes.br/ciclovix#";
+		String nsGeo = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+
+		OntModel model = ModelFactory.createOntologyModel();
+		model.setNsPrefix("ciclovix", ns);
+		model.setNsPrefix("foaf", FOAF.getURI());
+		model.setNsPrefix("geo", nsGeo);
+
+		Model geo = FileManager.get().loadModel(nsGeo);
+
+		Resource resAutor = model.createClass(ns + "autor");
+		Resource resAnotacao = model.createClass(ns + "anotacao");
+
+		Property anotacao_latitude = geo.getProperty(nsGeo + "lat");
+		Property anotacao_longitude = geo.getProperty(nsGeo + "long");
+
+		Property autor_id = model.createProperty(ns + "autor_id");
+		Property autor_tipo = model.createProperty(ns + "autor_tipo");
+		Property autor_twitter = model.createProperty(ns + "autor_twitter");
+
+		Property anotacao_id = model.createProperty(ns + "anotacao_id");
+		Property anotacao_nome = model.createProperty(ns + "anotacao_nome");
+		Property anotacao_autor = model.createProperty(ns + "anotacao_autor");
+		Property anotacao_foto = model.createProperty(ns + "anotacao_foto");
+		Property anotacao_link = model.createProperty(ns + "anotacao_link");
+
+		try {
+			List<Anotacao> anotacoes = daoAnotacao.listar();
+			List<Pessoa> autores = daoPessoa.listar();
+
+			for (Pessoa autor : autores) {
+				Resource res = model
+						.createResource(
+								ns + autor.getNome() + "_"
+										+ autor.getSobrenome(), resAutor)
+						.addLiteral(autor_id, autor.getId())
+						.addLiteral(autor_tipo, autor.getTipo())
+						.addProperty(FOAF.name, autor.getNome())
+						.addProperty(FOAF.family_name, autor.getSobrenome())
+						.addLiteral(autor_twitter, autor.getContaTwitter());
+
+			}
+
+			for (Anotacao anotacao : anotacoes) {
+				Resource res = model
+						.createResource(
+								ns + anotacao.getNome() + "_"
+										+ anotacao.getLatitude() + "_"
+										+ anotacao.getLongitude(), resAnotacao)
+						.addLiteral(anotacao_id, anotacao.getId())
+						.addLiteral(anotacao_nome, anotacao.getNome())
+						.addLiteral(anotacao_latitude, anotacao.getLatitude())
+						.addLiteral(anotacao_longitude, anotacao.getLongitude())
+						.addLiteral(anotacao_foto, anotacao.getFoto())
+						.addLiteral(anotacao_link, anotacao.getLink());
+				Pessoa autor = anotacao.getAutor();
+				if (autor != null) {
+					Resource resA = model.getResource(ns + autor.getNome()
+							+ "_" + autor.getSobrenome());
+					res.addProperty(anotacao_autor, resA);
+				}
+			}
+
+			StringWriter writer = new StringWriter();
+			model.write(writer);
+			dump = writer.toString();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		this.dump = dump;
+
+		return "dump";
+	}
 
 }

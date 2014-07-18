@@ -73,7 +73,8 @@
 				<p:inputText id="latlng" value="#{dbpediaMB.latlng}" />
 				<br />
 				<p:commandButton value="Info" update="qname,qarea,qpopulation,qflag"
-					actionListener="#{dbpediaMB.snippet}" />
+					actionListener="#{dbpediaMB.snippet}" /><h:commandButton
+					value="Dump" action="#{anotacaoMB.dumpAnotacoes}" />
 				<br />
 				<h:outputText value="-20.3167,-40.3500 (vix)" />
 				<br />
