@@ -2,17 +2,23 @@ package br.ufes.inf.lprm.ciclovix.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.event.map.OverlaySelectEvent;
+import org.primefaces.event.map.PointSelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
@@ -43,7 +49,40 @@ public class AnotacaoMB implements Serializable {
 	DataModel<Anotacao> listaAnotacoes;
 	
 	private Marker marker;
-	private MapModel simpleModel = new DefaultMapModel();;
+	private MapModel simpleModel = new DefaultMapModel();
+	
+	private List<String> items;
+	List<Categoria> cats;
+	private Map<String,Boolean> checkMap = new HashMap<String,Boolean>();
+
+	
+	@PostConstruct
+	public void init(){
+		simpleModel = new DefaultMapModel();
+		try {
+			items = new ArrayList<String>();
+			cats = this.daoCategoria.listar();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(Categoria c : cats){
+			items.add(c.getNome());
+		}
+		for (String item : items) {
+			checkMap.put(item,Boolean.TRUE);
+		}
+		
+		try {
+			markers = daoAnotacao.listar();			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}			
+		for(Anotacao a : markers){			
+			simpleModel.addOverlay( new Marker(new LatLng(a.getLongitude(), a.getLatitude()), a.getNome(), a ));
+		}	
+	}
 
 	public Anotacao getAnotacao() {
 		return this.anotacao;
@@ -84,18 +123,7 @@ public class AnotacaoMB implements Serializable {
 		return this.listaAnotacoes;
 	}
 	
-	public MapModel getMarkers() {
-		
-		try {
-			markers = daoAnotacao.listar();			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}							
-
-		for(Anotacao a : markers){
-			simpleModel.addOverlay( new Marker(new LatLng(a.getLongitude(), a.getLatitude()), a.getNome(), a ));
-		}
-		
+	public MapModel getMarkers() {							
         return simpleModel;
 	}
 	
@@ -123,6 +151,7 @@ public class AnotacaoMB implements Serializable {
 			System.out.println("SALVAR ANOTAÇÂO");
 			this.anotacao.setCategoria(daoCategoria.obter(this.categoria));
 			this.daoAnotacao.salvar(this.anotacao);
+			simpleModel.addOverlay( new Marker(new LatLng(anotacao.getLongitude(), anotacao.getLatitude()), anotacao.getNome(), anotacao ));
 			anotacao = new Anotacao();
 			
 		} catch (Exception e) {
@@ -141,5 +170,39 @@ public class AnotacaoMB implements Serializable {
 		}
 		return "listar_anotacoes";
 	}
+	
+	public List<String> getItems() {
+		return items;
+	}
+	
+	public Map<String, Boolean> getCheckMap() {
+		return checkMap;
+	}
+	
+	public String filtro(){
+		for(Marker m : simpleModel.getMarkers()){
+			Anotacao note = (Anotacao)m.getData();		
+			
+			if(!checkMap.get(note.getCategoria().getNome())){
+				m.setVisible(false);
+			}else{
+				m.setVisible(true);
+			}
+		}
+		return "index";
+	}
+	
+	public void onPointSelect(PointSelectEvent event) {
+        LatLng latlng = event.getLatLng();
+        
+        this.anotacao.setLatitude(latlng.getLng());
+        this.anotacao.setLongitude(latlng.getLat());
+        
+        addMessage(new FacesMessage(FacesMessage.SEVERITY_INFO, "Point Selected", "Lat:" + latlng.getLat() + ", Lng:" + latlng.getLng()));
+    }
+	
+	public void addMessage(FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
 
 }
