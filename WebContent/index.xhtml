@@ -10,8 +10,6 @@
 	<title>GMap</title>
 </h:head>
 <h:body>
-	<p:growl id="messages" showDetail="true" />
-
 	<p:breadCrumb>
 		<p:menuitem value="home" url="#" />
 		<p:menuitem value="Adicionar Informação" url="addMarker.xhtml"
@@ -27,19 +25,22 @@
 	<p:layout style="height:90%;">
 		<p:layoutUnit position="west">
 
-			<h:outputText value="Bem vindo " rendered="#{auth.logado}" />
-			<h:outputText value="#{auth.pessoa.nome}" rendered="#{auth.logado}" />
+			<h:outputText value="Bem vindo " rendered="#{auth.logado}"
+				style="font-weight:bold" />
+			<h:outputText value="#{auth.pessoa.nome}" rendered="#{auth.logado}"
+				style="font-weight:bold" />
+			<br />
+			<br />
 
 			<h:form>
-				<p:growl id="msg" />
+				<h:outputText value="Filtre por Categoria:" style="font-weight:bold" />
 
-				<h:outputText value="Filtre por Categoria:" />
-
-				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+				<h:panelGrid columns="2" style="margin-bottom:10px;" cellpadding="5">
 
 					<ui:repeat var="item" value="#{anotacaoMB.items}">
 						<p:selectBooleanCheckbox value="#{anotacaoMB.checkMap[item]}" />
 						<h:outputText value="#{item}" />
+						<br />
 					</ui:repeat>
 
 				</h:panelGrid>
@@ -48,7 +49,8 @@
 					actionListener="#{anotacaoMB.filtro()}" />
 			</h:form>
 
-			<h:outputText value="Informações da Cidade:" />
+			<h:outputText value="Informações da Cidade:" style="font-weight:bold" />
+
 
 			<h:form id="fsnippet">
 				<p:panelGrid columns="2" id="info">
@@ -68,20 +70,6 @@
 				</p:panelGrid>
 				<p:graphicImage id="qflag" url="#{dbpediaMB.qThumb}" />
 				<br />
-				<h:outputText value="Coordenadas (e.g. '-20.31,-40.35'):" />
-				<br />
-				<p:inputText id="latlng" value="#{dbpediaMB.latlng}" />
-				<br />
-				<p:commandButton value="Info" update="qname,qarea,qpopulation,qflag"
-					actionListener="#{dbpediaMB.snippet}" />
-				<h:commandButton value="Dump" action="#{anotacaoMB.dumpAnotacoes}" />
-				<br />
-				<h:outputText value="-20.3167,-40.3500 (vix)" />
-				<br />
-				<h:outputText value="-20.352513,-40.308053 (vila velha)" />
-				<br />
-				<h:outputText value="-21.781612,-48.174263 (araraquara)" />
-				<br />
 			</h:form>
 
 
@@ -96,10 +84,17 @@
 
 				<p:gmapInfoWindow id="infoWindow">
 					<p:outputPanel
-						style="text-align: center; display: block; margin: auto">
+						style="text-align: justify; display: block; margin: auto; width: 200;">
 
+						<h:outputText value="#{anotacaoMB.marker.data.nome}"
+							style="font-weight:bold" />
+						<br />
+						<br />
 						<h:outputText value="#{anotacaoMB.marker.data.descricao}" />
-						<h:outputText value="CASA" />
+						<br />
+						<img src="#{anotacaoMB.marker.data.foto}" alt="foto do local"
+							height="200" width="200" />
+						<a href="#{anotacaoMB.marker.data.link}">Mais Informções</a>
 
 					</p:outputPanel>
 				</p:gmapInfoWindow>
