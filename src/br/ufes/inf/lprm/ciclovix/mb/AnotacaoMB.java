@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
@@ -54,6 +55,9 @@ public class AnotacaoMB implements Serializable {
 	@EJB
 	PessoaDAO daoPessoa;
 
+	@ManagedProperty(value = "#{dbpediaMB}")
+	DbpediaMB dbpediaMB;
+
 	Anotacao anotacao = new Anotacao();
 	long categoria;
 	List<SelectItem> categorias;
@@ -75,6 +79,14 @@ public class AnotacaoMB implements Serializable {
 
 	public void setDump(String dump) {
 		this.dump = dump;
+	}
+
+	public DbpediaMB getDbpediaMB() {
+		return dbpediaMB;
+	}
+
+	public void setDbpediaMB(DbpediaMB dbpediaMB) {
+		this.dbpediaMB = dbpediaMB;
 	}
 
 	@PostConstruct
@@ -151,6 +163,12 @@ public class AnotacaoMB implements Serializable {
 
 	public void onMarkerSelect(OverlaySelectEvent event) {
 		marker = (Marker) event.getOverlay();
+
+		Anotacao anotacao = (Anotacao) marker.getData();
+		this.dbpediaMB.latlng = anotacao.getLongitude() + ","
+				+ anotacao.getLatitude();
+
+		this.dbpediaMB.snippet();
 	}
 
 	public Marker getMarker() {

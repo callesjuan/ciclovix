@@ -50,7 +50,7 @@
 
 			<h:outputText value="Informações da Cidade:" />
 
-			<h:form>
+			<h:form id="fsnippet">
 				<p:panelGrid columns="2" id="info">
 					<f:facet name="header">
 					</f:facet>
@@ -73,8 +73,8 @@
 				<p:inputText id="latlng" value="#{dbpediaMB.latlng}" />
 				<br />
 				<p:commandButton value="Info" update="qname,qarea,qpopulation,qflag"
-					actionListener="#{dbpediaMB.snippet}" /><h:commandButton
-					value="Dump" action="#{anotacaoMB.dumpAnotacoes}" />
+					actionListener="#{dbpediaMB.snippet}" />
+				<h:commandButton value="Dump" action="#{anotacaoMB.dumpAnotacoes}" />
 				<br />
 				<h:outputText value="-20.3167,-40.3500 (vix)" />
 				<br />
@@ -91,7 +91,8 @@
 			<p:gmap id="gmap" center="-20.2722883,-40.3026116" zoom="13"
 				type="HYBRID" styleClass="mapClass" model="#{anotacaoMB.markers}">
 				<p:ajax event="overlaySelect"
-					listener="#{anotacaoMB.onMarkerSelect}" />
+					listener="#{anotacaoMB.onMarkerSelect}"
+					update=":fsnippet:qname,:fsnippet:qarea,:fsnippet:qpopulation,:fsnippet:qflag" />
 
 				<p:gmapInfoWindow id="infoWindow">
 					<p:outputPanel

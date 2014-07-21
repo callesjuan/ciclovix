@@ -29,6 +29,7 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 
 @ManagedBean
+@SessionScoped
 public class DbpediaMB implements Serializable {
 
 	String latlng;
