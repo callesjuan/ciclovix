@@ -15,7 +15,7 @@
 		<p:menuitem value="Adicionar Informação" url="addMarker.xhtml"
 			rendered="#{auth.logado}" />
 		<p:menuitem value="Contatos" url="#" rendered="true" />
-		<p:menuitem value="Base de dados" url="#" rendered="true" />
+		<p:menuitem value="Base de dados" url="#{anotacaoMB.dumpAnotacoes()}" rendered="true" />
 		<p:menuitem value="Sair" url="#{userMB.invalidate()}"
 			rendered="#{auth.logado}" />
 		<p:menuitem value="Logar" url="login.xhtml"
@@ -23,7 +23,7 @@
 	</p:breadCrumb>
 
 	<p:layout style="height:90%;">
-		<p:layoutUnit position="west">
+		<p:layoutUnit position="west" maxSize="200">
 
 			<h:outputText value="Bem vindo " rendered="#{auth.logado}"
 				style="font-weight:bold" />

@@ -74,7 +74,7 @@ public class UserMB {
         	 System.out.println("DEBUG MANUAL - " + this.pessoa.getNome());
         	 this.logado = true; 
         	 this.deslogado = false;
-        	return "index";
+        	return "index.xhtml";
          }
      }
      

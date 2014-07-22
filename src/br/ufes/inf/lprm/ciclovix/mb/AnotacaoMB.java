@@ -199,7 +199,7 @@ public class AnotacaoMB implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "index";
+		return "index.xhtml";
 	}
 
 	public String excluirAnotacao() {
@@ -278,6 +278,7 @@ public class AnotacaoMB implements Serializable {
 		Property anotacao_autor = model.createProperty(ns + "anotacao_autor");
 		Property anotacao_foto = model.createProperty(ns + "anotacao_foto");
 		Property anotacao_link = model.createProperty(ns + "anotacao_link");
+		Property anotacao_categoria = model.createProperty(ns + "anotacao_categoria");
 
 		try {
 			List<Anotacao> anotacoes = daoAnotacao.listar();
@@ -307,7 +308,8 @@ public class AnotacaoMB implements Serializable {
 						.addLiteral(anotacao_latitude, anotacao.getLatitude())
 						.addLiteral(anotacao_longitude, anotacao.getLongitude())
 						.addLiteral(anotacao_foto, anotacao.getFoto())
-						.addLiteral(anotacao_link, anotacao.getLink());
+						.addLiteral(anotacao_link, anotacao.getLink())
+						.addLiteral(anotacao_categoria, anotacao.getCategoria().getNome());
 				Pessoa autor = anotacao.getAutor();
 				if (autor != null) {
 					Resource resA = model.getResource(ns + autor.getNome()
@@ -326,7 +328,7 @@ public class AnotacaoMB implements Serializable {
 
 		this.dump = dump;
 
-		return "dump";
+		return "dump.xhtml";
 	}
 
 }
