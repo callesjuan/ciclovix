@@ -19,6 +19,7 @@ public class UserMB {
      private String password;
      private boolean logado = false;
      private boolean deslogado = true;
+     private boolean error = false;
 
 	 private Pessoa pessoa = null;
      
@@ -49,8 +50,6 @@ public class UserMB {
 		this.logado = logado;
 	}
 	
-	
-	
 	public boolean isDeslogado() {
 		return deslogado;
 	}
@@ -66,15 +65,24 @@ public class UserMB {
 		this.pessoa = pessoa;
 	}
 	
+	public boolean isError() {
+		return error;
+	}
+
+	public void setError(boolean error) {
+		this.error = error;
+	}
+
 	public String validate() {          
     	 this.pessoa = daoPessoa.getByNameAndPass(this.userName,this.password);
          if(this.pessoa == null){
+        	 this.error = true;
         	 return "failure";
          }else{
-        	 System.out.println("DEBUG MANUAL - " + this.pessoa.getNome());
         	 this.logado = true; 
         	 this.deslogado = false;
-        	return "index.xhtml";
+        	 this.error = false;
+        	return "index";
          }
      }
      
@@ -82,6 +90,7 @@ public class UserMB {
     	 this.pessoa = null;
     	 this.logado = false;
     	 this.deslogado = true;
-    	 return "index.xhtml";
+    	 this.error = false;
+    	 return "index";
      }
 }

@@ -14,17 +14,22 @@
 		<p:layoutUnit position="west">
 			<h:form id="form">
 				<p:panel header="Cadastro de Nova Anotação">
-					<h:panelGrid id="grid" columns="2" cellpadding="5">
+					<p:messages autoUpdate="true" />
+					<h:panelGrid id="grid" columns="4" cellpadding="5">
 
 						<h:outputLabel for="nome" value="Nome:" style="font-weight:bold" />
 						<p:inputText id="nome" value="#{anotacaoMB.anotacao.nome}"
 							required="true" label="Nome" />
+						<p:message for="nome" />
+						<h:outputText value="#{anotacaoMB.anotacao.nome}" />
 
 						<h:outputLabel for="descricao" value="Descricao:"
 							style="font-weight:bold" />
 						<p:inputText id="descricao"
 							value="#{anotacaoMB.anotacao.descricao}" required="true"
 							label="Descrição" />
+						<p:message for="descricao" />
+						<h:outputText value="#{anotacaoMB.anotacao.descricao}" />
 
 						<h:outputLabel for="latitude" value="Latitude:"
 							style="font-weight:bold" />
@@ -32,6 +37,8 @@
 							required="true" label="Latitude">
 							<f:convertNumber longOnly="true" />
 						</p:inputText>
+						<p:message for="latitude" />
+						<h:outputText value="#{anotacaoMB.anotacao.latitude}" />
 
 						<h:outputLabel for="longitude" value="Longitude:"
 							style="font-weight:bold" />
@@ -40,6 +47,8 @@
 							label="Longitude">
 							<f:convertNumber longOnly="true" />
 						</p:inputText>
+						<p:message for="longitude" />
+						<h:outputText value="#{anotacaoMB.anotacao.longitude}" />
 
 						<h:outputLabel for="altitude" value="Altitude:"
 							style="font-weight:bold" />
@@ -47,16 +56,22 @@
 							required="false" label="Altitude">
 							<f:convertNumber longOnly="true" />
 						</p:inputText>
+						<p:message for="altitude" />
+						<h:outputText value="#{anotacaoMB.anotacao.altitude}" />
 
 						<h:outputLabel for="foto" value="Link para Foto:"
 							style="font-weight:bold" />
 						<p:inputText id="foto" value="#{anotacaoMB.anotacao.foto}"
 							required="true" label="Foto" />
+						<p:message for="foto" />
+						<h:outputText value="#{anotacaoMB.anotacao.foto}" />
 
 						<h:outputLabel for="link" value="Link para para Site:"
 							style="font-weight:bold" />
 						<p:inputText id="link" value="#{anotacaoMB.anotacao.link}"
 							required="true" label="Link" />
+						<p:message for="link" />
+						<h:outputText value="#{anotacaoMB.anotacao.link}" />
 
 						<h:outputLabel for="categoria" value="Categoria:"
 							style="font-weight:bold" />
@@ -65,6 +80,8 @@
 							<f:selectItem itemLabel="Select One" itemValue="" />
 							<f:selectItems value="#{anotacaoMB.categorias}" />
 						</p:selectOneMenu>
+						<p:message for="categoria" />
+						<h:outputText value="#{anotacaoMB.anotacao.categoria}" />
 					</h:panelGrid>
 					<h:commandButton action="#{anotacaoMB.salvarAnotacao}"
 						value="salvar" />
@@ -73,10 +90,11 @@
 		</p:layoutUnit>
 
 		<p:layoutUnit position="center">
-			<p:growl id="messages" showDetail="true" life="2000"/> 
+			<p:growl id="messages" showDetail="true" life="2000" />
 			<p:gmap id="gmap" center="-20.2722883,-40.3026116" zoom="13"
 				type="HYBRID" styleClass="mapClass">
-				<p:ajax event="pointSelect" listener="#{anotacaoMB.onPointSelect}" update="form" />
+				<p:ajax event="pointSelect" listener="#{anotacaoMB.onPointSelect}"
+					update="form" />
 			</p:gmap>
 		</p:layoutUnit>
 
